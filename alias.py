@@ -7,6 +7,8 @@ class Alias:
         self.polish = polish.strip()
 
     def print_alias(self):
+        if not self.polish:
+            return f".{self.alias} {self.english}"
         return f".{self.alias} {self.english}\n..{self.alias} {self.polish}\n.{self.alias}pl {self.polish}"
 
     def __str__(self):
