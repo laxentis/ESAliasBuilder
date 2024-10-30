@@ -1,12 +1,19 @@
 import logging
 
 class Alias:
+    """
+    Class representing a EuroScope text alias
+    """
     def __init__(self, alias: str = "", english: str ="", polish: str = ""):
         self.alias = alias.strip()
         self.english = english.strip()
         self.polish = polish.strip()
 
-    def print_alias(self):
+    def print_alias(self) -> str:
+        """
+        Print alias in EuroScope recognized format.
+        :return:
+        """
         if not self.polish:
             return f".{self.alias} {self.english}"
         return f".{self.alias} {self.english}\n..{self.alias} {self.polish}\n.{self.alias}pl {self.polish}"
@@ -16,8 +23,15 @@ class Alias:
 
 
 class AliasFile:
-
+    """
+    Class representing a EuroScope text alias file.
+    """
     def read_file(self, file_path: str):
+        """
+        Reads an alias text file into an AliasFile class.
+        :param file_path: path to the alias text file.
+        :return:
+        """
         logging.debug("Reading file " + file_path  )
         with open(file_path, "r") as file:
             for line in file:
@@ -54,13 +68,25 @@ class AliasFile:
                 self.aliases[alias] = entry
 
     def __init__(self):
+        """
+        Initializes empty AliasFile class.
+        """
         self.aliases = dict()
 
     def print_aliases(self):
+        """
+        Prints all aliases in an AliasFile in a EuroScope recognized format.
+        :return:
+        """
         for alias, entry in self.aliases.items():
             print(entry.print_alias())
 
     def save_to_file(self, file):
+        """
+        Saves all aliases in an AliasFile in a EuroScope recognized format to a text file.
+        :param file: path to the destination alias file
+        :return:
+        """
         with open(file, "w") as file:
             for alias, entry in self.aliases.items():
                 file.write(entry.print_alias() + "\n")

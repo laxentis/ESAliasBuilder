@@ -14,7 +14,14 @@ dpg.create_context()
 # dpg.show_item_registry()
 
 
-def select_callback(sender, appdata, userdata):
+def select_callback(sender: int, _appdata: None, userdata: str):
+    """
+    Callback for selecting a table entry
+    :param sender: id of the clicked item
+    :param _appdata: not used, required for dearpygui compatibility
+    :param userdata: alias designator
+    :return:
+    """
     entry = file.aliases[userdata]
     logging.debug('Selected entry ' + userdata + ' sender: ' + str(sender))
     dpg.set_value('edit_alias_alias', entry.alias)
@@ -26,7 +33,13 @@ def select_callback(sender, appdata, userdata):
     dpg.delete_item(row)
 
 
-def add_alias_to_table(table_tag, alias: Alias):
+def add_alias_to_table(table_tag: str, alias: Alias):
+    """
+    Adds an alias to a table
+    :param table_tag: DPG tag of the table
+    :param alias: alias to add
+    :return:
+    """
     with dpg.table_row(parent=table_tag, tag=f"alias_{alias.alias}"):
         a = dpg.add_selectable(label=alias.alias, span_columns=True, callback=select_callback)
         dpg.set_item_user_data(a, alias.alias)
@@ -36,7 +49,13 @@ def add_alias_to_table(table_tag, alias: Alias):
         dpg.set_item_user_data(p, alias.polish)
 
 
-def file_load_callback(sender, app_data):
+def file_load_callback(_sender, app_data):
+    """
+    Callback for loading an alias file
+    :param _sender: not used, needed for DPG compatibility
+    :param app_data: data returned by file dialog
+    :return:
+    """
     global file
     file.read_file(app_data['file_path_name'])
     # file.print_aliases()
@@ -46,7 +65,11 @@ def file_load_callback(sender, app_data):
     dpg.show_item('clear_file_button')  # dpg.show_item('save_as_button')  # dpg.show_item('add_alias_button')
 
 
-def file_clear_callback(sender, app_data):
+def file_clear_callback(_sender, _app_data):
+    """
+    Callback for clearing an alias file
+    :return:
+    """
     global file
     file = AliasFile()
     dpg.delete_item('alias_table', children_only=True)
@@ -56,7 +79,13 @@ def file_clear_callback(sender, app_data):
     dpg.show_item('load_file_button')
 
 
-def save_file_callback(sender, app_data):
+def save_file_callback(_sender, app_data):
+    """
+    Callback for saving an alias file
+    :param _sender: not used, needed for DPG compatibility
+    :param app_data: data returned by file dialog
+    :return:
+    """
     global file
     file.save_to_file(app_data['file_path_name'])
 
@@ -85,7 +114,7 @@ with dpg.window(tag="Primary Window"):
                        callback=lambda: dpg.show_item('save_file_dialog'))
 
 
-def clear_add_alias_dialog_callback(sender, app_data):
+def clear_add_alias_dialog_callback(_sender, _app_data):
     dpg.set_value('add_alias_alias', "")
     dpg.set_value('add_alias_english', "")
     dpg.set_value('add_alias_polish', "")
@@ -103,12 +132,12 @@ def add_alias_callback(sender, app_data):
     clear_add_alias_dialog_callback(sender, app_data)
 
 
-def combo_changed_callback(sender, app_data):
+def combo_changed_callback(_sender, app_data):
     description = functions[app_data]
     dpg.set_value("alias_add_function_description", description)
 
 
-def add_to_text(sender, app_data, user_data):
+def add_to_text(_sender, _app_data, user_data):
     text = dpg.get_value(user_data)
     function = dpg.get_value("add_alias_function")
     text += function
@@ -143,14 +172,14 @@ def edit_alias_callback(sender, app_data):
     clear_add_alias_dialog_callback(sender, app_data)
 
 
-def add_to_text_edit(sender, app_data, user_data):
+def add_to_text_edit(_sender, _app_data, user_data):
     text = dpg.get_value(user_data)
     function = dpg.get_value("edit_alias_function")
     text += function
     dpg.set_value(user_data, text)
 
 
-def combo_changed_callback_edit(sender, app_data):
+def combo_changed_callback_edit(_sender, app_data):
     description = functions[app_data]
     dpg.set_value("alias_edit_function_description", description)
 
